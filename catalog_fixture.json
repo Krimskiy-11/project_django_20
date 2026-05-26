@@ -1,0 +1,78 @@
+[
+{
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+        "product_name": "Iphone 15 Pro",
+        "description": "128 Gb, Gray",
+        "image": "",
+        "category": 8,
+        "price": 120000,
+        "created_at": "2026-05-23",
+        "updated_at": "2026-05-23"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+        "product_name": "Apple AirPods Pro",
+        "description": "Type-C",
+        "image": "",
+        "category": 10,
+        "price": 25000,
+        "created_at": "2026-05-23",
+        "updated_at": "2026-05-23"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+        "product_name": "Samsung SR-12 OLED",
+        "description": "120 см",
+        "image": "",
+        "category": 9,
+        "price": 100000,
+        "created_at": "2026-05-23",
+        "updated_at": "2026-05-23"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+        "product_name": "Samsung Galaxy S23",
+        "description": "256 Gb, Black",
+        "image": "",
+        "category": 8,
+        "price": 130000,
+        "created_at": "2026-05-23",
+        "updated_at": "2026-05-23"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 8,
+    "fields": {
+        "category_name": "Смартфоны",
+        "description": "Незаменимая вещь 21 века"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 9,
+    "fields": {
+        "category_name": "Телевизоры",
+        "description": "Отличное вещь для просмотра фильмов"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 10,
+    "fields": {
+        "category_name": "Наушники",
+        "description": "Прекрасно показывают себя для прослушивания музыки"
+    }
+}
+]

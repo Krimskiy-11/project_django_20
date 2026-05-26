@@ -3,12 +3,10 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
-DJANGO_KEY = os.getenv("DJANGO_KEY")
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = DJANGO_KEY
+SECRET_KEY = os.getenv("DJANGO_KEY")
 
 DEBUG = True
 
@@ -55,8 +53,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT', default='5432'),
     }
 }
 
@@ -88,4 +90,4 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
