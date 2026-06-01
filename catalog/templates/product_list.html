@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% load my_tags %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center mb-3">
+    <h1 class="display-1 mb-3">Skystore</h1>
+    <p class="lead mb-5">Skystore - это интернет-магазин для покупки оригинальной цифровой техники по выгодным ценам.</p>
+</div>
+<div class="container">
+    <h2 class="card-title pricing-card-title text-center mb-5"> Выберите товар: </h2>
+    <div class="row text-center">
+        {% for product in products %}
+        <div class="col-4">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h3 class="my-0 font-weight-normal">{{ product.product_name }}</h3>
+                </div>
+                <div class="card-body">
+                    <img src="{{ product.image | media_filter }}" alt="###">
+                    <h2 class="card-title pricing-card-title mb-5 mt-5"> {{ product.price }} ₽ </h2>
+                    <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'catalog:product_detail' product.pk %}">Выбрать</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+<nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
+    <div class="container">
+        <a class="navbar-brand d-md-none" href="#">
+            <svg class="bi" width="24" height="24" aria-hidden="true">
+                <use xlink:href="#aperture"></use>
+            </svg>
+            Aperture
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasLabel">Aperture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav flex-grow-1 justify-content-between">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" aria-label="Aperture">
+                            <svg class="bi" width="24" height="24" aria-hidden="true">
+                                <use xlink:href="#aperture"></use>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tour</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Product</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Enterprise</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Support</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" aria-label="Cart">
+                            <svg class="bi" width="24" height="24" aria-hidden="true">
+                                <use xlink:href="#cart"></use>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
