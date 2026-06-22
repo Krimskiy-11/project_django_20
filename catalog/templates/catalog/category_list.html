@@ -1,16 +1,21 @@
-{% extends 'base.html' %}
+{% extends 'catalog/base.html' %}
 
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center mb-3">
+
+<div class="card text-bg-dark mb-5">
+  <img src="/media/images/faf (1).jpg" class="card-img" alt="###">
+  <div class="card-img-overlay pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center mb-3">
     <h1 class="display-1 mb-3">Skystore</h1>
-    <p class="lead mb-5">Skystore - это интернет-магазин для покупки оригинальной цифровой техники по выгодным ценам.</p>
+    <p class="lead mb-4 mt-4">Skystore - это интернет-магазин для покупки оригинальной цифровой техники по выгодным ценам.</p>
+  </div>
 </div>
+
 <div class="container">
     <h2 class="card-title pricing-card-title text-center mb-5"> Выберите категорию товара: </h2>
     <div class="row text-center">
-        {% for category in category %}
+        {% for category in object_list %}
         <div class="col-4">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
