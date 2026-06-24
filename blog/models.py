@@ -32,3 +32,12 @@ class Blog(models.Model):
         help_text="Укажите количество просмотров",
         default=0
     )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "блог"
+        verbose_name_plural = "блоги"
+        ordering = ["title"]
+
