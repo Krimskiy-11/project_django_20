@@ -3,11 +3,10 @@ from django.db import models
 
 class Category(models.Model):
     category_name = models.CharField(
-        max_length=100, verbose_name="Название", help_text="Введите название категории"
+        max_length=100, verbose_name="Название",
     )
     description = models.TextField(
         verbose_name="Описание",
-        help_text="Введите описание категории",
         blank=True,
         null=True,
     )
@@ -23,11 +22,10 @@ class Category(models.Model):
 
 class Product(models.Model):
     product_name = models.CharField(
-        max_length=100, verbose_name="Название", help_text="Введите название продукта"
+        max_length=100, verbose_name="Название",
     )
     description = models.TextField(
         verbose_name="Описание",
-        help_text="Введите описание продукта",
         blank=True,
         null=True,
     )
@@ -36,7 +34,6 @@ class Product(models.Model):
         verbose_name="Фото",
         blank=True,
         null=True,
-        help_text="Загрузите фото продукта",
     )
     category = models.ForeignKey(
         Category,
@@ -44,9 +41,8 @@ class Product(models.Model):
         verbose_name="Категория",
         blank=True,
         null=True,
-        help_text="Выберите категорию продукта",
     )
-    price = models.IntegerField(help_text="Введите цену продукта", verbose_name="Цена")
+    price = models.IntegerField(verbose_name="Цена")
 
     created_at = models.DateField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateField(auto_now=True, verbose_name="Дата изменения")
