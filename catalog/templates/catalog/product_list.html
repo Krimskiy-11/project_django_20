@@ -26,11 +26,15 @@
                     {% load my_tags %}
                     <img src="{{ product.image | media_filter }}" alt="###">
                     <h2 class="card-title pricing-card-title mb-5 mt-5"> {{ product.price }} ₽ </h2>
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'catalog:product_detail' product.pk %}">Выбрать</a>
+                    <a class="btn btn btn-block btn-outline-primary" href="{% url 'catalog:product_detail' product.pk %}">Выбрать</a>
+                    <a class="btn btn btn-block btn-outline-primary" href="{% url 'catalog:product_update' product.pk %}">Редактировать</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
+</div>
+<div class="text-center">
+    <a class="btn btn-lg btn-block btn-outline-primary mt-3" href="{% url 'catalog:product_create' %}">+ Добавить продукт</a>
 </div>
 {% endblock %}
