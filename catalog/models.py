@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import CustomUser
+
 
 class Category(models.Model):
     category_name = models.CharField(
@@ -43,6 +45,14 @@ class Product(models.Model):
         null=True,
     )
     price = models.IntegerField(verbose_name="Цена")
+    is_publish = models.BooleanField(default=False, verbose_name="Статус публикации",)
+    owner = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        verbose_name="Владелец",
+        blank=True,
+        null=True,
+    )
 
     created_at = models.DateField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateField(auto_now=True, verbose_name="Дата изменения")
@@ -54,3 +64,7 @@ class Product(models.Model):
         verbose_name = "продукт"
         verbose_name_plural = "продукты"
         ordering = ["product_name"]
+        permissions = [
+            ('can_unpublish_product', 'Can unpublish product'),
+            ('can_delete_product', 'Can delete product'),
+        ]

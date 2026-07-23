@@ -1,14 +1,30 @@
-from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
     DetailView,
     TemplateView,
     UpdateView,
-    CreateView,)
-from catalog.forms import ProductForm, CategoryForm
+    CreateView,
+    View, DeleteView, )
+from catalog.forms import ProductForm, CategoryForm, ProductModeratorForm
 from catalog.models import Product, Category
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+
+
+class PublishProductView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        product = get_object_or_404(Product, id=pk)
+
+        if not request.user.has_perm('product.can_unpublish_product'):
+            return HttpResponseForbidden("У вас нет прав для снятия продукта с публикации.")
+
+        product.is_publish = False
+        product.save()
+
+        return redirect('catalog:product_list')
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -16,9 +32,10 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:product_list")
+    # permission_required = 'catalog.add_product'
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
 
@@ -27,24 +44,35 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProductForm
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:product_list")
+    # permission_required = 'catalog.edit_product'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm('can_unpublish_product') and user.has_perm('can_delete_product'):
+            return ProductModeratorForm
+        raise PermissionDenied
 
-class CategoryCreateView(CreateView):
+
+class CategoryCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = "catalog/category_form.html"
     success_url = reverse_lazy("catalog:home")
+    permission_required = 'catalog.add_category'
 
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = "catalog/category_form.html"
     success_url = reverse_lazy("catalog:home")
+    permission_required = 'catalog.edit_category'
 
 
 class CategoryListView(ListView):
@@ -55,8 +83,18 @@ class ProductListView(ListView):
     model = Product
 
 
+class ProductUnpublishListView(ListView):
+    model = Product
+    template_name = "catalog/unpublish_list.html"
+
+
 class ProductDetailView(DetailView):
     model = Product
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy("catalog:product_list")
 
 
 class ContactsView(TemplateView):
