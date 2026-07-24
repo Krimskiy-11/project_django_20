@@ -29,7 +29,7 @@
                     {% elif category.category_name == "Телевизоры" %}
                         <img src="media/images/телевизор (1).jpg" alt="###">
                     {% endif %}
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="products_list/">Выбрать</a>
+                    <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'catalog:category_detail' category.pk %}">Выбрать</a>
                 </div>
             </div>
         </div>

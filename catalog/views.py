@@ -12,6 +12,11 @@ from django.views.generic import (
 from catalog.forms import ProductForm, CategoryForm, ProductModeratorForm
 from catalog.models import Product, Category
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.core.cache import cache
+
+from catalog.services import get_category_product
 
 
 class PublishProductView(LoginRequiredMixin, View):
@@ -32,7 +37,6 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:product_list")
-    # permission_required = 'catalog.add_product'
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -44,7 +48,6 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProductForm
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:product_list")
-    # permission_required = 'catalog.edit_product'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -79,8 +82,26 @@ class CategoryListView(ListView):
     model = Category
 
 
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = "catalog/category_detail.html"
+    context_object_name = "category"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['products'] = get_category_product(self.kwargs['pk'])
+        return context
+
+
 class ProductListView(ListView):
     model = Product
+
+    def get_queryset(self):
+        queryset = cache.get('products_queryset')
+        if not queryset:
+            queryset = super().get_queryset()
+            cache.set('products_queryset', queryset, 60 * 15)
+        return queryset
 
 
 class ProductUnpublishListView(ListView):
@@ -88,8 +109,15 @@ class ProductUnpublishListView(ListView):
     template_name = "catalog/unpublish_list.html"
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductDetailView(DetailView):
     model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_id = self.object.category_id
+        context["category"] = Category.objects.get(id=category_id)
+        return context
 
 
 class ProductDeleteView(DeleteView):
