@@ -3,11 +3,22 @@ from django.core.exceptions import ValidationError
 
 from .models import Product, Category
 
+class ProductModeratorForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = [ "is_publish", ]
+
+    def __init__(self, *args, **kwargs):
+        super(ProductModeratorForm, self).__init__(*args, **kwargs)
+
+        self.fields["is_publish"].widget.attrs.update(
+            {"class": "form-check", "placeholder": "Публикация"}
+        )
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ["product_name", "description", "category", "price"]
+        fields = ["product_name", "description", "category", "price", ]
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
